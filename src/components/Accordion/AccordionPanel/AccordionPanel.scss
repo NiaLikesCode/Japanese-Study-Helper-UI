@@ -1,0 +1,21 @@
+.AccordionPanel {
+    padding: 0 18px;
+    background-color: white;
+    overflow: hidden;
+    transition: height 0.6s ease-out;
+    display: grid;
+    grid-template-columns: auto auto;
+}
+
+.Showing {
+    height: auto;
+}
+
+.Hidden {
+    height: 0;
+    display: none;
+}
+
+.LevelElements {
+
+}
