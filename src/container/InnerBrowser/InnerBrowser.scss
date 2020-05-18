@@ -5,7 +5,13 @@
     grid-template-columns: repeat(12, 1fr);
     grid-template-rows: 60px auto ;
 
-    object {
+    /*object {
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+    }*/
+
+    .webBrowser {
         width: 100%;
         height: 100%;
         overflow: hidden;

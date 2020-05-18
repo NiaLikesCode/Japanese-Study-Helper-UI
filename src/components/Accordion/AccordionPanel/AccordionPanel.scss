@@ -4,7 +4,6 @@
     overflow: hidden;
     transition: height 0.6s ease-out;
     display: grid;
-    grid-template-columns: auto auto;
 }
 
 .Showing {
@@ -16,6 +15,14 @@
     display: none;
 }
 
-.LevelElements {
+.ShowAll {
+    display: grid;
+    grid-template-columns: min-content auto;
+    margin-bottom: 2px;
+    border-bottom: 1px solid grey;
+    height: auto;
 
+    span {
+        text-align: left;
+    }
 }

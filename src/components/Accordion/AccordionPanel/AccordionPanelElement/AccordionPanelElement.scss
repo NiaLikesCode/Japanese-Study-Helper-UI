@@ -1,0 +1,8 @@
+.AccordionPanelElement {
+    grid-row: span 2;
+    display: grid;
+    grid-template-columns: auto auto;
+    margin-bottom: 2px;
+    border-bottom: 1px solid grey;
+    height: auto;
+}
