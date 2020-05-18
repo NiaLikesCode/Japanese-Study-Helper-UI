@@ -5,7 +5,7 @@ import AccordionPanel from './AccordionPanel/AccordionPanel';
 import Wrapper from '../../hoc/Wrapper/Wrapper';
 import classes from './Accordion.scss';
 
-const Accordion = () => {
+const Accordion = (props) => {
 
     const [isOpen, setIsOpen] = useState(false);
 
@@ -13,9 +13,12 @@ const Accordion = () => {
         <Wrapper>
             <div className={classes.Accordion} onClick={() => setIsOpen((prev) => !prev)}>
                 <Arrow direction={isOpen ? "Down" : "Right"} />
-                <p>Level 1</p>
+                <p>{props.children}</p>
             </div>
-            <AccordionPanel display={isOpen ? "Showing" : "Hidden"} />
+            <AccordionPanel 
+                display={isOpen ? "Showing" : "Hidden"}
+                selectAll={props.accordPanelSelectAll}
+                vocabList={props.vocabList} />
         </Wrapper>
     );
 };
