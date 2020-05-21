@@ -1,16 +1,18 @@
+@import './assets/fonts/fonts.scss';
+
 html {
   height: 100%;
   body {
     margin: 0;
-    font-family: -apple-system, BlinkMacSystemFont, 'Open Sans', 'Segoe UI', 'Roboto', 'Oxygen',
+    font-family: -apple-system, BlinkMacSystemFont, 'Noto Sans JP', 'Open Sans', 'Segoe UI', 'Roboto', 'Oxygen',
       'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
       sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     height: inherit;
 
-    div {
-      height: 100%;
+    ruby > rt {
+      font-size: 75%;
     }
   }
 }

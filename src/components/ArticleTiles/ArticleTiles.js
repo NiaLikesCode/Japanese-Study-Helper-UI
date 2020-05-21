@@ -1,16 +1,15 @@
 import React from 'react';
 
 import ArticleTile from './ArticleTile/ArticleTile';
-import Wrapper from '../../hoc/Wrapper/Wrapper';
 import classes from './ArticleTiles.scss';
 
 const articleTiles = (props) => {
     return(
-        <Wrapper>
+        <div className={classes.ArticleTiles}>
             {props.articles.map(article => (
-                <ArticleTile key={article.id} image={article.imageLocation} title={article.title} />
+                <ArticleTile key={article.id} image={article.imageLocation} title={article.title} date={article.date} />
             ))}
-        </Wrapper>
+        </div>
     );
 }
 

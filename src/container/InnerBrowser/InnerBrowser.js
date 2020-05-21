@@ -89,9 +89,8 @@ class InnerBrowser extends Component {
                     open={this.state.sideDrawerVisible}
                     close={this.sideDrawerCloseHandler} />
                 <div className={classes.innerBrowserHeader}><BrowserMenu drawerToggleClicked={this.sideDrawerToggleHandler} /></div>
-                <div className={classes.innerBrowserHeader}>
-                    {articleBody}
-                </div>
+                {articleBody}
+
             </div>
         );
     }
