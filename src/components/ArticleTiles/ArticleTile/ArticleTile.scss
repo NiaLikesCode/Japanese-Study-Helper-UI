@@ -1,9 +1,18 @@
 .ArticleTile {
     display: grid;
-    height: 300px;
-    width: 300px;
+    width: 350px;
 
     img {
-        width: 300px;
+        width: 350px;
+    }
+
+    .articleTitle {
+        display:inline-table;
+        white-space: pre-line;
+        word-break: keep-all;
+    }
+
+    .articleDate {
+        font-size: 12px;
     }
 }
