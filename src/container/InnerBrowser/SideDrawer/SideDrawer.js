@@ -9,14 +9,16 @@ class SideDrawer extends Component  {
         wkLevels: [
             {
                 wkLevel: 'Level 1',
-                wkLevelID: 1,
+                wkLevelId: 1,
                 accordionOpen: false,
                 vocabList: [
                     {
+                        vocabId: '1-1',
                         vocab: 'ちょっと',
                         selected: false
                     },
                     {
+                        vocabId: '1-2',
                         vocab: 'ちょ',
                         selected: false
                     }
@@ -24,14 +26,16 @@ class SideDrawer extends Component  {
             },
             {
                 wkLevel: 'Level 2',
-                wkLevelID: 2,
+                wkLevelId: 2,
                 accordionOpen: false,
                 vocabList: [
                     {
+                        vocabId: '2-1',
                         vocab: '何か',
                         selected: false
                     },
                     {
+                        vocabId: '2-2',
                         vocab: 'こんにちは',
                         selected: false
                     }
@@ -64,7 +68,7 @@ class SideDrawer extends Component  {
                 <button onClick={this.props.close}>X</button>
                 {this.state.wkLevels.map(wkLevel => (
                     <Accordion
-                        key={wkLevel.wkLevelID}
+                        key={wkLevel.wkLevelId}
                         accordPanelSelectAll={() => this.selectAllHandler(wkLevel.wkLevelID)}
                         vocabList={wkLevel.vocabList} > 
                         {wkLevel.wkLevel}

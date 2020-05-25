@@ -10,8 +10,9 @@ const browserMenu = (props) => {
             <DrawerToggle clicked={props.drawerToggleClicked} />
             <nav>
                 <ul className={classes.MenuItems}>
-                    <MenuItem>Easy NHK NEWS</MenuItem>
-                    <MenuItem>Fan Fics</MenuItem>
+                    <MenuItem link="/dashboard">Dashboard</MenuItem>
+                    <MenuItem link="/innerbrowser/easynhknews">Easy NHK NEWS</MenuItem>
+                    <MenuItem link="/fanfics">Fan Fics</MenuItem>
                 </ul>
             </nav>
         </header>
