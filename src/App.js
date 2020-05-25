@@ -1,19 +1,29 @@
 import React, { Component } from 'react';
-//import { Link, Route } from 'react-router-dom';
+import { Route, withRouter, Switch, Redirect, Router } from 'react-router-dom';
 
-import Wrapper from './hoc/Wrapper/Wrapper';
 import InnerBrowser from './container/InnerBrowser/InnerBrowser';
+import Frame from './hoc/Frame/Frame';
+import Dashboard from './container/Dashboard/Dashboard';
+import Article from './container/Article/Article';
 
 class App extends Component {
     render() {
+        const {path} = this.props.match;
+        console.log('app: ');
+        console.log(this.props);
         return (
-            <Wrapper>
-                <InnerBrowser />
-                {/*<Route path="/" exact component={} />*/}
-                {/*<Route path="/pizza" exact component={} />*/}
-            </Wrapper>
+            <div>
+                <Frame>
+                    <Switch>
+                        <Route path="/innerbrowser/easynhknews/articles/:id" component={Article}/>
+                        <Route path="/innerbrowser/easynhknews" component={InnerBrowser} />
+                        <Route path="/" exact component={Dashboard} />
+                        {/*<Redirect to="/" />*/}
+                    </Switch>
+                </Frame>
+            </div>
         );
     }
 }
 
-export default App;
+export default withRouter(App);

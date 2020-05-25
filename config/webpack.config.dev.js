@@ -87,9 +87,12 @@ module.exports = {
     },
     devtool: 'source-map',
     devServer: {
-        contentBase: path.resolve(__dirname, paths.appBuild),
+        //contentBase: path.resolve(__dirname, paths.appBuild),
         disableHostCheck: true,
-        port: 3000
+        port: 3000,
+        hot: true,
+        contentBase: './',
+        historyApiFallback: true
     },
     module: {
       rules: [

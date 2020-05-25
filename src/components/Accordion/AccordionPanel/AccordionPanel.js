@@ -13,6 +13,7 @@ const accordionPanel = (props) => {
             </div>
             {props.vocabList.map(vocab => (
                 <AccordionPanelElement
+                    key={vocab.vocabId}
                     isChecked={vocab.selected}
                     name={vocab.vocab} />
             ))}

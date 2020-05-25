@@ -8,12 +8,12 @@ const articleTile = (props) => {
     moment.locale('ja');
     let parsedTitle = ReactParse(props.title);
     return(
-        <div className={classes.ArticleTile}>
+        <article className={classes.ArticleTile}>
             <div></div>
             {props.image ? <img src={props.image} /> : null}
             <span className={classes.articleTitle}>{parsedTitle}</span>
             <span className={classes.articleDate}>{moment(props.date).format('MMMM Do HH:mm')}</span>
-        </div>
+        </article>
     );
 }
 

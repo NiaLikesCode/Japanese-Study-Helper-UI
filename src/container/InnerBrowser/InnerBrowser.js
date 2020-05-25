@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
 
-import BrowserMenu from '../../components/Menu/BrowserMenu/BrowserMenu';
-import SideDrawer from './SideDrawer/SideDrawer'; 
 import ArticleTiles from '../../components/ArticleTiles/ArticleTiles';
-import { findObjectInHTML, removeAllInstancesOfTag } from '../../shared/utility';
+import { findObjectInHTML, removeAllInstancesByTag } from '../../shared/utility';
 import classes from './InnerBrowser.scss';
 import { parse } from 'node-html-parser';
 import ReactParse from 'html-react-parser';
@@ -12,7 +10,6 @@ import { nhkAxios } from '../../axios';
 class InnerBrowser extends Component {
 
     state = {
-        sideDrawerVisible: false,
         nhkEasyArticles: null
     }
 
@@ -26,7 +23,7 @@ class InnerBrowser extends Component {
             html = findObjectInHTML(html, 'id', 'js-article-body');
             console.log(html);
             console.log(html.toString());
-            removeAllInstancesOfTag(html, 'a', html);
+            removeAllInstancesByTag(html, 'a', html);
             console.log(html);
             console.log(html.toString());
             this.setState({nhkEasyArticles: html});
@@ -36,7 +33,7 @@ class InnerBrowser extends Component {
         });*/
         nhkAxios.get('/news/easy/news-list.json')
         .then(response => {
-            console.log(response.data[0]);
+            //console.log(response.data[0]);
             let dates = response.data[0]
             let articles = [];
             for(let key in dates) {
@@ -54,7 +51,7 @@ class InnerBrowser extends Component {
                         advanceURL: article.news_web_url
                     }
                     articles.push(articleObject);
-                    console.log(article.news_easy_image_uri);
+                    //console.log(article.news_easy_image_uri);
                 });
             }
             this.setState({nhkEasyArticles: articles});
@@ -62,16 +59,6 @@ class InnerBrowser extends Component {
 
         });
     }    
-
-    sideDrawerToggleHandler = () => {
-        this.setState((prevState) => {
-            return {sideDrawerVisible : !prevState.sideDrawerVisible}
-        });
-    }
-
-    sideDrawerCloseHandler = () => {
-        this.setState({sideDrawerVisible: false});
-    }
 
     deleteHtmlNode = (html, identifier, type) => {
         html.filter()
@@ -81,16 +68,11 @@ class InnerBrowser extends Component {
         let articleBody = null;
         if(this.state.nhkEasyArticles) {
             //articleBody = ReactParse(this.state.nhkEasyArticles.toString());
-            articleBody = <ArticleTiles articles={this.state.nhkEasyArticles}  />
+            articleBody = <ArticleTiles articles={this.state.nhkEasyArticles} history={this.props.history} match={this.props.match}  />
         }
         return (
             <div className={classes.InnerBrowser}>
-                <SideDrawer
-                    open={this.state.sideDrawerVisible}
-                    close={this.sideDrawerCloseHandler} />
-                <div className={classes.innerBrowserHeader}><BrowserMenu drawerToggleClicked={this.sideDrawerToggleHandler} /></div>
                 {articleBody}
-
             </div>
         );
     }
