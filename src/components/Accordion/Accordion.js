@@ -5,7 +5,7 @@ import AccordionPanel from './AccordionPanel/AccordionPanel';
 import Wrapper from '../../hoc/Wrapper/Wrapper';
 import classes from './Accordion.scss';
 
-const Accordion = (props) => {
+const Accordion = React.memo(props => {
 
     const [isOpen, setIsOpen] = useState(false);
 
@@ -18,9 +18,11 @@ const Accordion = (props) => {
             <AccordionPanel 
                 display={isOpen ? "Showing" : "Hidden"}
                 selectAll={props.accordPanelSelectAll}
+                isSelectAll={props.selectAll}
+                elementOnChange={props.accordElementOnChange}
                 vocabList={props.vocabList} />
         </Wrapper>
     );
-};
+});
 
 export default Accordion;

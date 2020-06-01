@@ -77,7 +77,7 @@ const getStyleLoaders = (cssOptions, preProcessor) => {
 
 module.exports = {
     mode: 'development',
-    entry: './src/index.js',
+    entry: ['@babel/polyfill','./src/index.js'],
     output: {
         path: __dirname + paths.appBuild,
         pathinfo: true,
@@ -90,7 +90,6 @@ module.exports = {
         //contentBase: path.resolve(__dirname, paths.appBuild),
         disableHostCheck: true,
         port: 3000,
-        hot: true,
         contentBase: './',
         historyApiFallback: true
     },

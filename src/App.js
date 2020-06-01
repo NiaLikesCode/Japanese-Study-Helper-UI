@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Route, withRouter, Switch, Redirect, Router } from 'react-router-dom';
+import { Route, withRouter, Switch, Redirect} from 'react-router-dom';
 
 import InnerBrowser from './container/InnerBrowser/InnerBrowser';
 import Frame from './hoc/Frame/Frame';
@@ -8,9 +8,7 @@ import Article from './container/Article/Article';
 
 class App extends Component {
     render() {
-        const {path} = this.props.match;
-        console.log('app: ');
-        console.log(this.props);
+        //const {path} = this.props.match;
         return (
             <div>
                 <Frame>
