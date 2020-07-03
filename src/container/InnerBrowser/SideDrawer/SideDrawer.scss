@@ -1,22 +1,44 @@
+$drawerWidth: 300px;
+
 .SideDrawer {
-    position: fixed;
-    width: 300px;
-    max-width: 70%;
-    height: 100%;
-    left: 0;
-    top: 0;
-    z-index: 200;
-    background-color: rgb(240, 239, 239);
+    //position: fixed;
+    //width: $drawerWidth;
+    //max-width: 70%;
+    //height: 100%;
+    //left: #{$drawerWidth *-1};
+    //top: 0;
     padding: 32px 16px 0px;
     box-sizing: border-box;
-    transition: transform 0.3s ease-out;
+    transition: all 0.3s ease-out;
+    //overflow-y: scroll;
+}
+
+.DrawerContainer {
+    position: fixed;
+    width: $drawerWidth;
+    height: 100%;
+    right: -285px;
+    padding-left: 30px;
+    transition: all 0.3s ease-out;
+    z-index: 200;
+    box-shadow: 3px 0px 5px 0px rgba(0,0,0,0.2);
     overflow-y: scroll;
+    background-color: rgb(240, 239, 239);
+
+    &:hover, &:focus {
+        transform: translate3d(-285px,0,0);
+        animation-timing-function: 1s ease-in;
+    }
 }
 
-.Open {
-    transform: translateX(0);
-}
-
-.Close {
-    transform: translateX(-100%);
+.Title {
+    top: 50%;
+    position: absolute;
+    -webkit-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+    transform: rotate(270deg);
+    left: 10px;
+    font-weight: 800;
+    font-size: 15px;
 }

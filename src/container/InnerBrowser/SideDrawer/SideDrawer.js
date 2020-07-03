@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 
 import Accordion from '../../../components/Accordion/Accordion';
+import Wrapper from '../../../hoc/Wrapper/Wrapper';
 import {waniKaniAxios} from '../../../axios';
 import classes from './SideDrawer.scss';
 
@@ -10,14 +11,24 @@ class SideDrawer extends Component  {
         wkLevels: {}
     }
 
+    shouldComponentUpdate(nextProps, nextState) {
+        if(JSON.stringify(this.state.wkLevels) === JSON.stringify(nextState.wkLevels)) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
     mapOutLevels = (object, currentResultsObject) => {
         //makes deep copy of object
         let mappedLevels = JSON.parse(JSON.stringify(currentResultsObject));
         object.data.forEach(vocab => {
             //checking to see if there is an object with the same level as the vocab. 
+            console.log(vocab);
             let foundLevelObject = mappedLevels[vocab.data.level];
             let vocabObject = {
                 id: vocab.id,
+                key: vocab.id,
                 value: vocab.data.characters,
                 meanings: vocab.data.meanings.map(({meaning}) => meaning),
                 partsOfSpeach: vocab.data.parts_of_speech,
@@ -101,24 +112,25 @@ class SideDrawer extends Component  {
 
 
     render() {
-        let attachedClasses = [classes.SideDrawer, classes.Close];
-        if(this.props.open) {
-            attachedClasses = [classes.SideDrawer, classes.Open];
-        }
         console.log('SideDrawer');
+        console.log(this.state.wkLevels);
         return(
-            <div className={attachedClasses.join(' ')}>
-                <button onClick={this.props.close}>X</button>
-                {Object.values(this.state.wkLevels).map(wkLevel => (
-                    <Accordion
-                        key={wkLevel.wkLevelId}
-                        accordPanelSelectAll={(accrodEls) => this.selectAllHandler(accrodEls)}
-                        selectAll={false}
-                        accordElementOnChange={(id) => this.onChangeHandler(id, wkLevel.wkLevelId)}
-                        vocabList={wkLevel.vocabList} > 
-                        {wkLevel.wkLevelTitle}
-                    </Accordion>
-                ))}
+            <div className={classes.DrawerContainer}>
+                <div className={classes.Title}>
+                    Vocab
+                </div>
+                <div className={classes.SideDrawer}>
+                    {Object.values(this.state.wkLevels).map(wkLevel => (
+                        <Accordion
+                            key={wkLevel.wkLevelId}
+                            accordPanelSelectAll={(accrodEls) => this.selectAllHandler(accrodEls)}
+                            selectAll={false}
+                            accordElementOnChange={(id) => this.onChangeHandler(id, wkLevel.wkLevelId)}
+                            vocabList={wkLevel.vocabList} > 
+                            {wkLevel.wkLevelTitle}
+                        </Accordion>
+                    ))}
+                </div>
             </div> 
         ); 
     }

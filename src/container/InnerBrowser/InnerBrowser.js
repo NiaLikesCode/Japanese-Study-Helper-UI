@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 
 import ArticleTiles from '../../components/ArticleTiles/ArticleTiles';
 import { findObjectInHTML, removeAllInstancesByTag } from '../../shared/utility';
+import { Route, withRouter, Switch, Redirect, Router} from 'react-router-dom';
+import SideDrawer from './SideDrawer/SideDrawer';
+import Article from '../Article/Article';
 import classes from './InnerBrowser.scss';
 import { parse } from 'node-html-parser';
 import ReactParse from 'html-react-parser';
@@ -14,23 +17,6 @@ class InnerBrowser extends Component {
     }
 
     componentWillMount() {
-        /*let html;
-        nhkAxios.get('/news/easy/k10012430641000/k10012430641000.html')
-        .then(response => {
-            console.log(response.data);
-            html = parse(response.data);
-            html.removeWhitespace();
-            html = findObjectInHTML(html, 'id', 'js-article-body');
-            console.log(html);
-            console.log(html.toString());
-            removeAllInstancesByTag(html, 'a', html);
-            console.log(html);
-            console.log(html.toString());
-            this.setState({nhkEasyArticles: html});
-        })
-        .catch(error => {
-            console.log('something broke', error);
-        });*/
         nhkAxios.get('/news/easy/news-list.json')
         .then(response => {
             //console.log(response.data[0]);
@@ -72,7 +58,11 @@ class InnerBrowser extends Component {
         }
         return (
             <div className={classes.InnerBrowser}>
-                {articleBody}
+                <SideDrawer />
+                <div className={classes.InnerBrowserBody}>
+                    <Route path="/innerbrowser/easynhknews/articles/:id" render={(props) => <Article {...props} />}/>
+                    <Route path="/innerbrowser/easynhknews"  exact render={() => articleBody}/>
+                </div>
             </div>
         );
     }

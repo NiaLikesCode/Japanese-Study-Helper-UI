@@ -1,5 +1,5 @@
 export const constants = {
-    NHKARTICLE : {
+    NHKARTICLE: {
         ARTICLE_DATE: {
             PROPERTY_NAME: 'news_prearranged_time'
         },
@@ -20,5 +20,54 @@ export const constants = {
         ARTICLE_VIDEO: {
             PROPERTY_NAME: 'news_web_movie_uri'
         }
+    },
+    UVERB: {
+        ENDINGS: ['う','く','す','つ','ぬ','ふ','む','る','ぐ','ず','づ','ぶ','ぷ'],
+        CONJUGATION: {
+            FORMAL_PRESENT: 'ます',
+            FORMAL_NEGATIVE: 'ません',
+            FORMAL_PAST: 'ました',
+            FORMAL_NEGATIVE_PAST: 'ませんでした',
+            INFORMAL_NEGATIVE: 'ない',
+            INFORMAL_PAST: 'た',
+            INFORMAL_NEGATIVE_PAST: 'なかった',
+            TE: 'て',
+            IMPERATIVE: 'め',
+            VOLITIONAL: 'よう',
+            PASSIVE: 'れる',
+            CAUSATIVE: 'せる',
+            CONDITIONAL: 'ば',
+            POTENTIAL: 'る',
+            MASUYOU: 'ましょう'
+        }
+    },
+    RUVERB: {
+        ENDINGS : ['る'],
+        CONJUGATION: {
+            FORMAL_PRESENT: 'ます',
+            FORMAL_NEGATIVE: 'ません',
+            FORMAL_PAST: 'ました',
+            FORMAL_NEGATIVE_PAST: 'ませんでした',
+            INFORMAL_NEGATIVE: 'ない',
+            INFORMAL_PAST: 'た',
+            INFORMAL_NEGATIVE_PAST: 'なかった',
+            TE: 'て',
+            IMPERATIVE: 'め',
+            VOLITIONAL: 'よう',
+            PASSIVE: 'られる',
+            CAUSATIVE: 'させる',
+            CONDITIONAL: 'れば',
+            POTENTIAL: 'られる',
+            MASUYOU: 'ましょう'
+        }
+    },
+    IADJECTIVE: {
+        ENDING: ['い']
+    },
+    NAADJECTIVE: {
+
+    },
+    IRREGULAR: {
+
     }
 }

@@ -8,7 +8,8 @@ import { findObjectInHTML, removeAllInstancesByTag, removeAllInstancesByAttribut
 class Article extends Component {
     state = {
         loadedArticle: null,
-        loadedArticleId: null
+        loadedArticleId: null,
+        searchedVocab: ['の']
     }
 
     componentDidMount() {
@@ -16,29 +17,26 @@ class Article extends Component {
     }
 
     componentDidUpdate() {
-        this.loadData();
+        //this.loadData();
     }
 
     loadData() {
         if(this.props.match.params.id) {
-            console.log('Article: ');
-            console.log(this.props.match);
             if(!this.state.loadedArticleId || (this.state.loadedArticleId && this.state.loadedArticleId !== this.props.match.params.id)) {
                 let id = this.props.match.params.id;
                 nhkAxios.get('/news/easy/' + id + '/' + id + '.html')
                 .then(response => {
-                    console.log(response.data);
                    let html = parse(response.data);
                     html.removeWhitespace();
-                    html = findObjectInHTML(html, 'id', 'js-article-body');
                     console.log(html);
-                    console.log(html.toString());
+                    html = findObjectInHTML(html, 'id', 'js-article-body');
                     removeAllInstancesByTag(html, 'a', html);
                     removeAllInstancesByTag(html, 'iframe', html);
                     removeAllInstancesByTag(html, 'figure', html);
-                    removeAllInstancesByAttribute(html, 'class', 'playerWrapper', html);
+                    html = removeAllInstancesByAttribute(html, 'class', 'playerWrapper');
+                    removeAllInstancesByTag(html, 'span', html);
                     console.log(html);
-                    console.log(html.toString());
+                    console.log(html.childNodes[0].innerHTML);
                     this.setState({loadedArticle: html});
                     this.setState({loadedArticleId: id});
                 })
@@ -50,6 +48,7 @@ class Article extends Component {
     }
 
     render() {
+        console.log('article');
         let article = <p style={{textAlign: 'center'}}>This is not a valid article!!!!!!</p>;
         if(this.props.match.params.id) {
             article = <p style={{textAlign: 'center'}}>Loading......?</p>;

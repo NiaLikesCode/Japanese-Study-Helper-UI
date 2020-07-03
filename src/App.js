@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
-import { Route, withRouter, Switch, Redirect} from 'react-router-dom';
+import { Route, withRouter, Switch, Redirect, Router} from 'react-router-dom';
 
 import InnerBrowser from './container/InnerBrowser/InnerBrowser';
 import Frame from './hoc/Frame/Frame';
 import Dashboard from './container/Dashboard/Dashboard';
-import Article from './container/Article/Article';
 
 class App extends Component {
     render() {
@@ -12,16 +11,13 @@ class App extends Component {
         return (
             <div>
                 <Frame>
-                    <Switch>
-                        <Route path="/innerbrowser/easynhknews/articles/:id" component={Article}/>
-                        <Route path="/innerbrowser/easynhknews" component={InnerBrowser} />
-                        <Route path="/" exact component={Dashboard} />
-                        {/*<Redirect to="/" />*/}
-                    </Switch>
-                </Frame>
+                    <Route path="/" exact component={Dashboard} />
+                    <Route path="/innerbrowser" component={InnerBrowser} />
+                    {/*<Redirect to="/" />*/}
+                </Frame>   
             </div>
         );
     }
 }
 
-export default withRouter(App);
+export default App;

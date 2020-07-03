@@ -10,10 +10,12 @@ const articleTiles = (props) => {
     return(
         <div className={classes.ArticleTiles}>
             {props.articles.map(article => (
-                <Link key={'link-' + article.id} to={`${props.match.path}/articles/${article.id}`}>
+                <Link key={'link-' + article.id} to={`${props.match.path}/easynhknews/articles/${article.id}`}>
                     <ArticleTile key={article.id} image={article.imageLocation} title={article.title} date={article.date}/>
                 </Link>
             ))}
+            {console.log('ArticleTiles')}
+            {console.log(props)}
         </div>
     );
 }
