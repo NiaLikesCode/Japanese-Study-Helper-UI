@@ -9,8 +9,7 @@ import { highlightVocabInArticle } from '../../shared/nhkUtility';
 class Article extends Component {
     state = {
         loadedArticle: null,
-        loadedArticleId: null,
-        searchedVocab: ['の']
+        loadedArticleId: null
     }
 
     shouldComponentUpdate(nextProps, nextState) {
