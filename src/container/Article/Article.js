@@ -4,12 +4,21 @@ import { nhkAxios } from '../../axios';
 import { parse } from 'node-html-parser';
 import ReactParse from 'html-react-parser';
 import { findObjectInHTML, removeAllInstancesByTag, removeAllInstancesByAttribute } from '../../shared/utility';
+import { highlightVocabInArticle } from '../../shared/nhkUtility';
 
 class Article extends Component {
     state = {
         loadedArticle: null,
         loadedArticleId: null,
         searchedVocab: ['の']
+    }
+
+    shouldComponentUpdate(nextProps, nextState) {
+        if(this.props.highlightedArticleNode === nextProps.highlightedArticleNode && this.state.loadedArticle === nextState.loadedArticle ) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
     componentDidMount() {
@@ -37,7 +46,9 @@ class Article extends Component {
                     removeAllInstancesByTag(html, 'span', html);
                     console.log(html);
                     console.log(html.childNodes[0].innerHTML);
+                    //highlightVocabInArticle(html, this.props.vocabList);
                     this.setState({loadedArticle: html});
+                    this.props.getArticle(html);
                     this.setState({loadedArticleId: id});
                 })
                 .catch(error => {
@@ -53,7 +64,9 @@ class Article extends Component {
         if(this.props.match.params.id) {
             article = <p style={{textAlign: 'center'}}>Loading......?</p>;
         }
-        if(this.state.loadedArticle) {
+        if(this.props.highlightedArticleNode) {
+            article = ReactParse(this.props.highlightedArticleNode.toString());
+        } else if(this.state.loadedArticle) {
             article = ReactParse(this.state.loadedArticle.toString());
         }
         return article;

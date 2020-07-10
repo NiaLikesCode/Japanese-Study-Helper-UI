@@ -16,7 +16,7 @@ const accordionPanel = React.memo(props => {
     return(
         <div className={[classes.AccordionPanel, classes[props.display]].join(' ')}>
             <div className={classes.ShowAll}>
-                <input type="checkbox" onChange={() => props.selectAll(accordElements)}/> 
+                <input type="checkbox" onChange={() => props.selectAll(props.levelId)}/> 
                 <span>Select All</span>
             </div>
             {console.log('accordionPanel')}

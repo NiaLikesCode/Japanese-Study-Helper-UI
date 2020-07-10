@@ -1,31 +1,28 @@
 import React, { Component } from 'react';
 
 import ArticleTiles from '../../components/ArticleTiles/ArticleTiles';
-import { findObjectInHTML, removeAllInstancesByTag } from '../../shared/utility';
-import { Route, withRouter, Switch, Redirect, Router} from 'react-router-dom';
+import { highlightVocabInArticle } from '../../shared/nhkUtility';
 import SideDrawer from './SideDrawer/SideDrawer';
 import Article from '../Article/Article';
 import classes from './InnerBrowser.scss';
-import { parse } from 'node-html-parser';
-import ReactParse from 'html-react-parser';
 import { nhkAxios } from '../../axios';
 
 class InnerBrowser extends Component {
 
     state = {
-        nhkEasyArticles: null
+        nhkEasyArticles: null,
+        selectedVocabList: null,
+        currentArticleNode: null
     }
 
-    componentWillMount() {
+    componentDidMount() {
         nhkAxios.get('/news/easy/news-list.json')
         .then(response => {
-            //console.log(response.data[0]);
             let dates = response.data[0]
             let articles = [];
             for(let key in dates) {
                 if(!dates.hasOwnProperty(key)) continue;
                 let dateArticles = dates[key];
-                //console.log(dateArticles);
                 dateArticles.forEach(article => {
                     let articleObject = {
                         id: article.news_id,
@@ -37,30 +34,40 @@ class InnerBrowser extends Component {
                         advanceURL: article.news_web_url
                     }
                     articles.push(articleObject);
-                    //console.log(article.news_easy_image_uri);
                 });
             }
             this.setState({nhkEasyArticles: articles});
         }).catch(error => {
 
         });
-    }    
+    }  
 
-    deleteHtmlNode = (html, identifier, type) => {
-        html.filter()
+    updateSelectedVocab = (vocabList) => {
+        this.setState({selectedVocabList: vocabList});
+    }
+
+    highlightLoadedArticle = () => {
+        return highlightVocabInArticle(this.state.currentArticleNode, this.state.selectedVocabList);
+    }
+
+    getCurrentRenderedArticle = (articleNode) => {
+        this.setState({currentArticleNode: articleNode});
     }
 
     render() {
+        let highlightedArticleNode = null;
+        if(this.state.selectedVocabList && this.state.currentArticleNode) {
+            highlightedArticleNode = this.highlightLoadedArticle();
+        }
         let articleBody = null;
         if(this.state.nhkEasyArticles) {
-            //articleBody = ReactParse(this.state.nhkEasyArticles.toString());
             articleBody = <ArticleTiles articles={this.state.nhkEasyArticles} history={this.props.history} match={this.props.match}  />
         }
         return (
             <div className={classes.InnerBrowser}>
-                <SideDrawer />
+                <SideDrawer getSelectedVocabList={this.updateSelectedVocab} />
                 <div className={classes.InnerBrowserBody}>
-                    <Route path="/innerbrowser/easynhknews/articles/:id" render={(props) => <Article {...props} />}/>
+                    <Route path="/innerbrowser/easynhknews/articles/:id" render={(props) => <Article {...props} highlightedArticleNode={highlightedArticleNode} getArticle={this.getCurrentRenderedArticle} />}/>
                     <Route path="/innerbrowser/easynhknews"  exact render={() => articleBody}/>
                 </div>
             </div>

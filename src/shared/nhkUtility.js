@@ -3,30 +3,39 @@ import { parse } from 'node-html-parser';
 const OPENRUBYTAG = '<ruby>',
 CLOSERUBYTAG = '</ruby>',
 OPENRTTAG = '<rt>',
-CLOSERTTAGE = '</rt>';
+CLOSERTTAGE = '</rt>',
+OPENMARKTAG = '<mark>',
+CLOSEMARKTAG = '</mark>';
 
 //check the reading and the kanji to make sure it matches
 export const highlightVocabInArticle = (articleNode, vocabList) => {
-    let finalObject = parse(articleNode.toString());
+    let finalArticleNode = parse(articleNode.toString());
     for(let i = 0; i < vocabList.length; i++) {
-        let articleString = finalObject.toString();
-        let searchType = '';
-        if(vocabList[i].partOfSpeech.includes('noun')) { 
-            searchType = OPENRUBYTAG + vocabList[i].vocabKanji + OPENRTTAG + vocabList[i].
-         } else {
-            searchType = 'stem';
-         }
-        let searchText = vocabList[i][searchType];
-        if(finalObject.text.includes(searchText)) {
-            let locations = findLocationsOfWord(articleString.toString(), OPENRUBYTAG + vocabList[i]);
-
+        let articleString = finalArticleNode.toString();
+        let searchText;
+        let locations;
+        //for each instance of a kanaStem check to see if it exists in the text
+        vocabList[i].kanaStems.forEach(kanaStem => {
+            let possibleSearchText = OPENRUBYTAG + vocabList[i].kanjiStem + OPENRTTAG + kanaStem + CLOSERTTAGE + CLOSERUBYTAG;
+            //if text with this kana is found to exist then update searchTexts
+            if(articleString.includes(possibleSearchText)) {
+                searchText = possibleSearchText;
+            }
+        }); 
+        if(searchText) {
+            locations = findLocationsOfWord(articleString.toString(), searchText);
+            //add mark tag to all locations where searchText was found
+            locations.forEach(location => {
+                articleString = insertMarkTag(articleString, location, searchText);
+            });
         }
+        finalArticleNode = parse(articleString);
     }
-    return finalObject;
+    return finalArticleNode;
 }
 
-const insert = (origText, startPos, text) => {
-   return origText.substring(0, startPos) + text + origText.substring(startPos);
+const insertMarkTag = (origText, startPos, text) => {
+   return origText.substring(0, startPos) + OPENMARKTAG + origText.substring(startPos, startPos + text.length) + CLOSEMARKTAG + origText.substring(startPos + text.length);
 }
 
 const findLocationsOfWord = (text, searchWord) => {
@@ -34,15 +43,16 @@ const findLocationsOfWord = (text, searchWord) => {
     currentPosition = 0;
     while(text.includes(searchWord)) {
         currentPosition = text.search(searchWord);
-        if(locations.length > 0) locations.push(currentPosition + location[locations.length-1])
+        if(locations.length > 0) locations.push(currentPosition + locations[locations.length-1] + searchWord.length)
         else {
             locations.push(currentPosition);
         }
          text = text.substring(currentPosition + searchWord.length);
     }
-    return locations;
+    //reverse array so that it inserts new text at the end and doesn't ruin other location accuracy
+    return locations.reverse();
 }
 
-const getInbetweenContent = (openTagIdentifier, closingTagIdentifier, text) => {
+/*const getInbetweenContent = (openTagIdentifier, closingTagIdentifier, text) => {
     
-}
+}*/

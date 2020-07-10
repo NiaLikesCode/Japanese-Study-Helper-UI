@@ -19,6 +19,7 @@ const Accordion = React.memo(props => {
                 display={isOpen ? "Showing" : "Hidden"}
                 selectAll={props.accordPanelSelectAll}
                 isSelectAll={props.selectAll}
+                levelId={props.levelId}
                 elementOnChange={props.accordElementOnChange}
                 vocabList={props.vocabList} />
         </Wrapper>

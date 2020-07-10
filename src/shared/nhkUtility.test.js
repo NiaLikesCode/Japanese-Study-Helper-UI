@@ -6,15 +6,36 @@ describe('highligtVocabInArticle()', () => {
 
     vocabList = [
         {
-            vocabKana: 'はなす',
-            stem: 'はな',
-            vocabKanji: '話す',
-            partOfSpeech: 'godan verb'
+            id: 2469,
+            key: 2469,
+            meanings: ['to speak'],
+            readings: ['はなす'],
+            selected: false,
+            value: '話す',
+            isGodanVerb: true,
+            kanaStems: ['はな'],
+            kanjiStem: '話'
         },
         {
-            vocabKana: 'とうきょうと',
-            vocabKanji: '東京都',
-            partOfSpeech: 'proper noun'
+            id: 2469,
+            key: 2469,
+            meanings: ['To Stand Up', 'To Stand Something Up', 'To Erect', 'To Erect Something'],
+            readings: ['たてる'],
+            selected: false,
+            value: '立てる',
+            isIchidanVerb: true,
+            kanaStems: ['たて'],
+            kanjiStem: '立て'
+        },
+        {
+            id: 23254,
+            key: 23254,
+            meanings: ['tokyo metro', 'tokyo metropolis'],
+            readings: ['とうきょうと'],
+            selected: false,
+            value: '東京都',
+            kanaStems: ['とうきょうと'],
+            kanjiStem: '東京都'
         }
     ];
 
