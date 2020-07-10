@@ -8,6 +8,7 @@ process.env.NODE_ENV = 'development';
 
 module.exports = {
     mode: 'production',
+    devtool: 'source-map',
     bail: 'true',
     entry: './src/index.js',
     output: {
@@ -17,7 +18,8 @@ module.exports = {
       publicPath: paths.servedPath
     },
     optimization: {
-      minimize: true
+      minimize: true,
+      splitChunks: {chunks: "all"}
     },
     module: {
       rules: [
@@ -61,6 +63,11 @@ module.exports = {
         new MiniCssExtractPlugin({
             filename: 'static/css/[name].[contenthash:8].css',
             chunkFilename: 'static/css/[name].[contenthash:8].css'
+        }),
+        new DefinePlugin({
+          'process.env': {
+            'NODE_ENV': JSON.stringify('production')
+          }
         })
     ]
 };

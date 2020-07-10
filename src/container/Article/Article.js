@@ -4,6 +4,7 @@ import { nhkAxios } from '../../axios';
 import { parse } from 'node-html-parser';
 import ReactParse from 'html-react-parser';
 import { findObjectInHTML, removeAllInstancesByTag, removeAllInstancesByAttribute } from '../../shared/utility';
+import { highlightVocabInArticle } from '../../shared/nhkUtility';
 
 class Article extends Component {
     state = {
@@ -11,35 +12,42 @@ class Article extends Component {
         loadedArticleId: null
     }
 
+    shouldComponentUpdate(nextProps, nextState) {
+        if(this.props.highlightedArticleNode === nextProps.highlightedArticleNode && this.state.loadedArticle === nextState.loadedArticle ) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
     componentDidMount() {
         this.loadData();
     }
 
     componentDidUpdate() {
-        this.loadData();
+        //this.loadData();
     }
 
     loadData() {
         if(this.props.match.params.id) {
-            console.log('Article: ');
-            console.log(this.props.match);
             if(!this.state.loadedArticleId || (this.state.loadedArticleId && this.state.loadedArticleId !== this.props.match.params.id)) {
                 let id = this.props.match.params.id;
                 nhkAxios.get('/news/easy/' + id + '/' + id + '.html')
                 .then(response => {
-                    console.log(response.data);
                    let html = parse(response.data);
                     html.removeWhitespace();
-                    html = findObjectInHTML(html, 'id', 'js-article-body');
                     console.log(html);
-                    console.log(html.toString());
+                    html = findObjectInHTML(html, 'id', 'js-article-body');
                     removeAllInstancesByTag(html, 'a', html);
                     removeAllInstancesByTag(html, 'iframe', html);
                     removeAllInstancesByTag(html, 'figure', html);
-                    removeAllInstancesByAttribute(html, 'class', 'playerWrapper', html);
+                    html = removeAllInstancesByAttribute(html, 'class', 'playerWrapper');
+                    removeAllInstancesByTag(html, 'span', html);
                     console.log(html);
-                    console.log(html.toString());
+                    console.log(html.childNodes[0].innerHTML);
+                    //highlightVocabInArticle(html, this.props.vocabList);
                     this.setState({loadedArticle: html});
+                    this.props.getArticle(html);
                     this.setState({loadedArticleId: id});
                 })
                 .catch(error => {
@@ -50,11 +58,14 @@ class Article extends Component {
     }
 
     render() {
+        console.log('article');
         let article = <p style={{textAlign: 'center'}}>This is not a valid article!!!!!!</p>;
         if(this.props.match.params.id) {
             article = <p style={{textAlign: 'center'}}>Loading......?</p>;
         }
-        if(this.state.loadedArticle) {
+        if(this.props.highlightedArticleNode) {
+            article = ReactParse(this.props.highlightedArticleNode.toString());
+        } else if(this.state.loadedArticle) {
             article = ReactParse(this.state.loadedArticle.toString());
         }
         return article;

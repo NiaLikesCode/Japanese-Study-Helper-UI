@@ -1,16 +1,16 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 import classes from './MenuItem.scss';
 
 const menuItem = (props) => (
     <li className={classes.MenuItem}>
-        <NavLink 
+        <Link 
             to={props.link}
             exact={props.exact}
-            activeClassName={classes.active} >
+            /*activeClassName={classes.active}*/ >
             {props.children}
-        </NavLink>
+        </Link>
     </li>
 );
 

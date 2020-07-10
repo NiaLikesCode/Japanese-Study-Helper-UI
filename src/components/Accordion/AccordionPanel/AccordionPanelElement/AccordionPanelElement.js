@@ -10,7 +10,7 @@ const accordionPanelElement = React.memo(props => {
         event.persist();
         console.log(event);
         setIsChecked(prev => !prev);
-        props.onChange(event);
+        props.onChange(props.id);
     };
 
     return(

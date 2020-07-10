@@ -1,13 +1,23 @@
 import React, { Component } from 'react';
 
 import Accordion from '../../../components/Accordion/Accordion';
-import {waniKaniAxios} from '../../../axios';
+import { waniKaniAxios } from '../../../axios';
+import { createStem } from '../../../shared/vocabModifier';
 import classes from './SideDrawer.scss';
 
 class SideDrawer extends Component  {
 
     state = {
-        wkLevels: {}
+        wkLevels: {},
+        selectedVocabList: []
+    }
+
+    shouldComponentUpdate(nextProps, nextState) {
+        if(JSON.stringify(this.state.wkLevels) === JSON.stringify(nextState.wkLevels)) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
     mapOutLevels = (object, currentResultsObject) => {
@@ -18,12 +28,14 @@ class SideDrawer extends Component  {
             let foundLevelObject = mappedLevels[vocab.data.level];
             let vocabObject = {
                 id: vocab.id,
+                key: vocab.id,
                 value: vocab.data.characters,
                 meanings: vocab.data.meanings.map(({meaning}) => meaning),
-                partsOfSpeach: vocab.data.parts_of_speech,
                 readings: vocab.data.readings.map(({reading}) => reading),
                 selected: false
             };
+            //add stems to vocab object
+            vocabObject = createStem(vocabObject, vocab.data.parts_of_speech)
             //If there is then it adds the vocab to the array list of vocab for that level, 
             //otherwise it creates a new level and creates array of vocab in that level and add vocab to that array
             if(foundLevelObject) {
@@ -76,49 +88,55 @@ class SideDrawer extends Component  {
        this.getWanikaniData();
     }
 
-    selectAllHandler = (accordEls) => {
-        //event.persist();
-        //console.log(event);
-        console.log(accordEls);
-        accordEls[0].props.onChange(accordEls[0].props.id);
-        console.log(accordEls[0]);
-        /*let updatedWkLevels = JSON.parse(JSON.stringify(this.state.wkLevels));
-        let level = updatedWkLevels[id];
-        console.log(event);
-        Object.values(level.vocabList).forEach(vocab => {
-            //console.log(vocab);
+    selectAllHandler = (levelId) => {
+        let updatedWkLevels = JSON.parse(JSON.stringify(this.state.wkLevels));
+        let updatedSelectedVocabList = [...this.state.selectedVocabList];
+        Object.values(updatedWkLevels[levelId].vocabList).forEach(vocab => {
             vocab.selected = !vocab.selected;
+            if(vocab.selected) {
+                updatedSelectedVocabList.push(vocab);
+            } 
         });
-        updatedWkLevels[id] = level;
-        this.setState({wkLevels: updatedWkLevels})*/
+        updatedSelectedVocabList = updatedSelectedVocabList.filter(vocab => vocab.selected === true)
+        this.setState({wkLevels: updatedWkLevels, selectedVocabList: updatedSelectedVocabList});
+        this.props.getSelectedVocabList(updatedSelectedVocabList);
     }; 
 
     onChangeHandler = (vocabId, levelId) => {
         let updatedWkLevels = JSON.parse(JSON.stringify(this.state.wkLevels));
-        let level = updatedWkLevels[levelId];
-        console.log('parent OnChange Handler');
+        let vocabObject = updatedWkLevels[levelId].vocabList[vocabId];
+        vocabObject.selected = !vocabObject.selected;
+        let updatedSelectedVocabList = [...this.state.selectedVocabList];
+        if(vocabObject.selected) {
+            updatedSelectedVocabList.push(vocabObject);
+        }
+        this.setState({wkLevels: updatedWkLevels, selectedVocabList: updatedSelectedVocabList});
+        //call InnerBrowser function that sends updatedVocabList to InnerBorwser component
+        this.props.getSelectedVocabList(updatedSelectedVocabList);
     };
 
 
     render() {
-        let attachedClasses = [classes.SideDrawer, classes.Close];
-        if(this.props.open) {
-            attachedClasses = [classes.SideDrawer, classes.Open];
-        }
         console.log('SideDrawer');
+        console.log(this.state.wkLevels);
         return(
-            <div className={attachedClasses.join(' ')}>
-                <button onClick={this.props.close}>X</button>
-                {Object.values(this.state.wkLevels).map(wkLevel => (
-                    <Accordion
-                        key={wkLevel.wkLevelId}
-                        accordPanelSelectAll={(accrodEls) => this.selectAllHandler(accrodEls)}
-                        selectAll={false}
-                        accordElementOnChange={(id) => this.onChangeHandler(id, wkLevel.wkLevelId)}
-                        vocabList={wkLevel.vocabList} > 
-                        {wkLevel.wkLevelTitle}
-                    </Accordion>
-                ))}
+            <div className={classes.DrawerContainer}>
+                <div className={classes.Title}>
+                    Vocab
+                </div>
+                <div className={classes.SideDrawer}>
+                    {Object.values(this.state.wkLevels).map(wkLevel => (
+                        <Accordion
+                            key={wkLevel.wkLevelTitle}
+                            accordPanelSelectAll={(accrodEls) => this.selectAllHandler(accrodEls)}
+                            selectAll={false}
+                            levelId={wkLevel.wkLevelId}
+                            accordElementOnChange={(id) => this.onChangeHandler(id, wkLevel.wkLevelId)}
+                            vocabList={wkLevel.vocabList} > 
+                            {wkLevel.wkLevelTitle}
+                        </Accordion>
+                    ))}
+                </div>
             </div> 
         ); 
     }
