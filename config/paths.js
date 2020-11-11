@@ -8,7 +8,8 @@ const resolveApp = relativePath => path.resolve(appDirectory, relativePath);
 
 module.exports = {
     appSrc: resolveApp('src'),
-    appHtml: resolveApp('./src/index.html'),
-    appBuild: resolveApp('./dist'),
-    appNodeModules: resolveApp('node_modules')
+    appHtml: resolveApp('src/index.html'),
+    appBuild: resolveApp('dist'),
+    appNodeModules: resolveApp('node_modules'),
+    appIndexJs: resolveApp('src/index.js')
 };

@@ -1,4 +1,4 @@
-import { findObjectInHTML, removeAllInstancesByTag, removeAllInstancesByAttribute } from './utility';
+import { findObjectInHTML, removeAllInstancesByTag, removeAllInstancesByAttribute } from '../../src/shared/utility';
 import { parse } from 'node-html-parser';
 
 describe('findObjectInHTML()', () => {

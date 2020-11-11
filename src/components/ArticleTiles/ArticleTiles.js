@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 import ArticleTile from './ArticleTile/ArticleTile';
-import Article from '../../container/Article/Article';
+import Article from '../../containers/Article/Article';
 import classes from './ArticleTiles.scss';
 
 const articleTiles = (props) => {

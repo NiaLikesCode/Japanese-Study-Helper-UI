@@ -23,6 +23,7 @@ class SideDrawer extends Component  {
     mapOutLevels = (object, currentResultsObject) => {
         //makes deep copy of object
         let mappedLevels = JSON.parse(JSON.stringify(currentResultsObject));
+        console.log(object.data);
         object.data.forEach(vocab => {
             //checking to see if there is an object with the same level as the vocab. 
             let foundLevelObject = mappedLevels[vocab.data.level];
