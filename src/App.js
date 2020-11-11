@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { Route, withRouter, Switch, Redirect, Router} from 'react-router-dom';
 
-import InnerBrowser from './container/InnerBrowser/InnerBrowser';
+import InnerBrowser from './containers/InnerBrowser/InnerBrowser';
 import Frame from './hoc/Frame/Frame';
-import Dashboard from './container/Dashboard/Dashboard';
+import Dashboard from './containers/Dashboard/Dashboard';
 
 class App extends Component {
     render() {

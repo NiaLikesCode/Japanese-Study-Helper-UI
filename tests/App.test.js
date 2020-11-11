@@ -1,8 +1,8 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 
-import App from './App'
-import Frame from './hoc/Frame/Frame';
+import App from '../src/App'
+import Frame from '../src/hoc/Frame/Frame';
 import { Route } from 'react-router-dom';
 
 describe('<App />', () => {

@@ -1,73 +1,83 @@
-const path = require('path');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const getCSSModuleLocalIdent = require('react-dev-utils/getCSSModuleLocalIdent');
+const TerserPlugin = require('terser-webpack-plugin');
+//const postcssNormalize = require('postcss-normalize');
+const commonConfig= require('./webpack.config.common');
+const { merge } = require('webpack-merge');
 
-const HtmlWebPackPlugin = require("html-webpack-plugin");
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-
-process.env.BABEL_ENV = 'dvelopment';
-process.env.NODE_ENV = 'development';
-
-module.exports = {
+module.exports = merge(commonConfig, {
     mode: 'production',
     devtool: 'source-map',
-    bail: 'true',
-    entry: './src/index.js',
     output: {
-      path: paths.appBuild,
-      filename: 'static/js/[name].[contenthash:8].js',
-      chunkFilename: 'static/js/[name].[contenthash:8].chunk.js',
-      publicPath: paths.servedPath
-    },
-    optimization: {
-      minimize: true,
-      splitChunks: {chunks: "all"}
+        publicPath: './'
     },
     module: {
-      rules: [
-        {
-          test: /\.(js|jsx)$/,
-          exclude: /node_modules/,
-          use: {
-            loader: "babel-loader"
-          }
-        },
-        {
-            test: /\.(sass|scss|css)$/,
-            exclude: /node_modules/,
-            loader: [
-                MiniCssExtractPlugin.loader,
-                {
-                    loader: 'css-loader',
-                    options: {
-                        modules: true,
-                        sourceMap: false,
-                        importLoaders: 1,
-                        localIdentName: '[local]___[hash:base64:5]'
-                    }
-                },
-                {
-                  loader: 'sass-loader',
-                  options: {
-                    sourceMap: false
-                  }
-                }
-            ]
-        }
-      ]
+        rules: [
+            /*{
+                test:/\.css$/,
+                use: [
+                    MiniCssExtractPlugin.loader, 
+                    'css-loader'
+                ]
+            },*/
+            {
+                test:/\.(scss|sass)$/,
+                use: [
+                    MiniCssExtractPlugin.loader, 
+                    {
+                        loader: 'css-loader',
+                        options: {
+                            importLoaders: 2,
+                            modules: {
+                                getLocalIdent: getCSSModuleLocalIdent
+                            }
+                        }
+                    },
+                    /*{
+                        loader: 'postcss-loader',
+                        options: {
+                            ident: 'postcss',
+                            plugins: () => [
+                                require('postcss-flextbugs-fixes'),
+                                require('postcss-preset-env')({
+                                    autoprefixer: {
+                                        flexbox: 'no-2009',
+                                      },
+                                      stage: 3
+                                }),
+                                postcssNormalize()
+                            ]
+                        }
+                    },*/
+                    'resolve-url-loader', 
+                    'sass-loader'
+                ],
+                sideEffects: true
+            },
+        ]
     },
     plugins: [
-        new HtmlWebPackPlugin({
-          template: __dirname + "/src/index.html",
-          filename: "./index.html",
-          inject: 'body'
-        }),
         new MiniCssExtractPlugin({
-            filename: 'static/css/[name].[contenthash:8].css',
-            chunkFilename: 'static/css/[name].[contenthash:8].css'
-        }),
-        new DefinePlugin({
-          'process.env': {
-            'NODE_ENV': JSON.stringify('production')
-          }
+            filename: '[name].[contenthash].css'
         })
-    ]
-};
+    ],
+    optimization: {
+        minimizer: [
+            new OptimizeCssAssetsPlugin({
+                cssProcessorOptions: {
+                    map: {
+                        inline: false,
+                        annotation: true
+                    }
+                }
+            }),
+            new TerserPlugin({
+                parallel: true,
+                cache: true,
+                sourceMap: true
+            })
+        ],
+        //splitChunks: {chunks: "all"}
+    }
+})

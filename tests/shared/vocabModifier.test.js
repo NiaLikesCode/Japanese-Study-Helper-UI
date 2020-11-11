@@ -1,10 +1,9 @@
-import { createStem } from './vocabModifier';
+import { createStem } from '../../src/shared/vocabModifier';
 
 describe('createStem()', () => { 
     let vocabObject, partsOfSpeech;
 
     it('should add kana stem and kanji stem to vocabObject for ichidan verb', () => {
-        debugger
         vocabObject = {
             id: 2469,
             key: 2469,
@@ -30,7 +29,6 @@ describe('createStem()', () => {
     });
 
     it('should add kana stem and kanji stem to vocabObject for い adjective', () => {
-        debugger
         vocabObject = {
             id: 2469,
             key: 2469,
@@ -56,7 +54,6 @@ describe('createStem()', () => {
     });
 
     it('should add kana stem and kanji stem to vocabObject for adverb', () => {
-        debugger
         vocabObject = {
             id: 2469,
             key: 2469,

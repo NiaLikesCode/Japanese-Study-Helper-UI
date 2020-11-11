@@ -1,5 +1,5 @@
 import { parse } from 'node-html-parser';
-import { highlightVocabInArticle } from './nhkUtility'
+import { highlightVocabInArticle } from '../../src/shared/nhkUtility'
 
 describe('highligtVocabInArticle()', () => { 
     let articleNode, vocabList;
@@ -60,7 +60,6 @@ describe('highligtVocabInArticle()', () => {
     });
 
     it('should add <mark> Element around elements contained in vocabList', () => {
-        debugger
         let expectedObject = parse(
             `<p>
                 <ruby>新<rt>あたら</rt></ruby>
