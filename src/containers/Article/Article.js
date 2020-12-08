@@ -13,13 +13,13 @@ class Article extends Component {
 
     shouldComponentUpdate(nextProps, nextState) {
         if(this.state.loadedArticle && nextState.loadedArticle) {
-            if(this.props.highlightedArticleNode == nextProps.highlightedArticleNode && this.state.loadedArticle.toString() == nextState.loadedArticle.toString()) {
+            if(this.props.highlightedArticleNode === nextProps.highlightedArticleNode && this.state.loadedArticle.toString() === nextState.loadedArticle.toString()) {
                 return false;
             } else {
                 return true;
             }
         } else {
-            if(this.props.highlightedArticleNode == nextProps.highlightedArticleNode && this.state.loadedArticle == nextState.loadedArticle) {
+            if(this.props.highlightedArticleNode === nextProps.highlightedArticleNode && this.state.loadedArticle === nextState.loadedArticle) {
                 return false;
             } else {
                 return true;

@@ -1,4 +1,4 @@
-import { constants } from './constants';
+//import { constants } from './constants';
 
 export const createStem = (vocabObject, partsOfSpeech) => {
     let newVocabObject = JSON.parse(JSON.stringify(vocabObject));

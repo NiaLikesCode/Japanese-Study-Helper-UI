@@ -10,7 +10,7 @@ const articleTile = (props) => {
     return(
         <article className={classes.ArticleTile}>
             <div></div>
-            {props.image ? <img src={props.image} /> : null}
+            {props.image ? <img src={props.image} alt={props.date + "-img"} /> : null}
             <span className={classes.articleTitle}>{parsedTitle}</span>
             <span className={classes.articleDate}>{moment(props.date).format('MMMM Do HH:mm')}</span>
         </article>

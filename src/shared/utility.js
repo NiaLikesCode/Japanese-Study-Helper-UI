@@ -1,4 +1,6 @@
 import { parse } from 'node-html-parser';
+import { waniKaniAxios } from '../axios';
+import { createStem } from '../shared/vocabModifier';
 
 /**
  * Returns HTML object with with attribute of a certain value and all it's children
@@ -71,7 +73,7 @@ export const removeAllInstancesByTag = (object, htmlTag, parentObject) => {
 const swapNodeWithChildren = (node) => {
     let indexOfObject = node.parentNode.childNodes.findIndex(child => child === node);
     //make node's parent the new parent of it's children
-    node.childNodes.map(child => {
+    node.childNodes.foreach(child => {
         if(child.nodeType !== 3) {
             child.parentNode = node.parentNode;
         }
@@ -129,6 +131,89 @@ export const removeAllInstancesByAttribute = (object, attribute, attributeValue)
     return finalObject;
 }
 
-export const objectDeepCopy = (object) => {
-    return JSON.parse(JSON.stringify(object));
+export const mapOutLevels = (object, currentResultsObject) => {
+    //makes deep copy of object
+    let mappedLevels = JSON.parse(JSON.stringify(currentResultsObject));
+    object.data.forEach(vocab => {
+        //checking to see if there is an object with the same level as the vocab. 
+        let foundLevelObject = mappedLevels[vocab.data.level];
+        let vocabObject = {
+            id: vocab.id,
+            key: vocab.id,
+            value: vocab.data.characters,
+            meanings: vocab.data.meanings.map(({meaning}) => meaning),
+            readings: vocab.data.readings.map(({reading}) => reading),
+            selected: false,
+            started: false,
+            burned: false,
+        };
+        //add stems to vocab object
+        vocabObject = createStem(vocabObject, vocab.data.parts_of_speech)
+        //If there is then it adds the vocab to the array list of vocab for that level, 
+        //otherwise it creates a new level and creates array of vocab in that level and add vocab to that array
+        if(foundLevelObject) {
+            mappedLevels[vocab.data.level].vocabList[vocab.id] = vocabObject;
+        } else {
+            let vocabListObject = {};
+            vocabListObject[vocab.id] = vocabObject;
+            let levelObject = {
+                wkLevelTitle: 'Level ' + vocab.data.level,
+                wkLevelId: vocab.data.level,
+                vocabList: vocabListObject
+            };
+            mappedLevels[vocab.data.level] = levelObject;
+        }
+    });
+    return mappedLevels;
 }
+
+export const extractVocabStatus = (vocabStatuses, currentObject) => {
+    //makes deep copy of object
+    let mappedLevels = JSON.parse(JSON.stringify(currentObject));
+    //console.log(vocabStatuses.data);
+    vocabStatuses.data.forEach(vocabStatus => {
+        let id = vocabStatus.data.subject_id
+        Object.values(mappedLevels).forEach(level => {
+            let vocabList = level.vocabList;
+            if(vocabList.hasOwnProperty(id)) {
+                vocabList[id].started = true;
+                vocabList[id].srsStage = vocabStatus.data.srs_stage;
+                vocabList[id].selected = true;
+                if(vocabList[id].srsStage == 9) vocabList[id].burned = true;
+            }
+        }); 
+    });
+    return mappedLevels;
+}
+
+export const getDataFromAllPages = async (url) => {
+    let pages = [];
+    try {
+        //getting intial data
+        const initialData = await waniKaniAxios.get(url);
+        //using the intial data and mapping out the levels then saving it into results object
+        pages.push(initialData.data);
+        //get the next page url
+        let nextPageUrl = initialData.data.pages.next_url;
+        //while there is a next page url keep calling the service and adding it to the results object
+        while(nextPageUrl){
+            const laterData = await waniKaniAxios.get(nextPageUrl);
+            nextPageUrl = laterData.data.pages.next_url;
+            pages.push(laterData.data);
+        }
+    } catch (err) {
+        Promise.reject(new Error(`Opps new wanikani error, ${err}`));
+    }
+    return Promise.resolve(pages);
+}
+
+/*function deepCopy(obj) {
+    if(typeof obj === 'object') {
+     return Object.keys(obj)
+      .map(k => ({ [k]: deepCopy(obj[k]) }))
+      .reduce((a, c) => Object.assign(a, c), {});
+    } else if(Array.isArray(obj)) {
+     return obj.map(deepCopy)
+    }
+    return obj;
+   }*/

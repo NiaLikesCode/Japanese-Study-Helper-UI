@@ -1,4 +1,8 @@
 export const constants = {
+    WK_CALLS: {
+        VOCAB_DATA_URL: '/subjects?types=vocabulary',
+        STARTED_VOCAB_URL: '/assignments?subject_types=vocabulary;started=true'
+    },
     NHKARTICLE: {
         ARTICLE_DATE: {
             PROPERTY_NAME: 'news_prearranged_time'

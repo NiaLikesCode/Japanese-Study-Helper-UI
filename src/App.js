@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Route, withRouter, Switch, Redirect, Router} from 'react-router-dom';
+import { Route } from 'react-router-dom';
 
 import InnerBrowser from './containers/InnerBrowser/InnerBrowser';
 import Frame from './hoc/Frame/Frame';
