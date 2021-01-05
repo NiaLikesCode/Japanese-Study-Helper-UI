@@ -7,7 +7,7 @@ const imageInlineSizeLimit = parseInt(
   );
 
 module.exports = {
-    entry: paths.appIndexJs,
+    entry: ['core-js/stable', 'regenerator-runtime/runtime', paths.appIndexJs],
     output: {
         filename: '[name].[contenthash].js',
         path: paths.appBuild,
@@ -41,7 +41,7 @@ module.exports = {
                 use: {
                     loader: 'babel-loader',
                     options: {
-                        cacheDirectory: true
+                        cacheDirectory: true,
                     }
                 }
             },
