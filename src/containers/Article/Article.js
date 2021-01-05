@@ -19,7 +19,7 @@ class Article extends Component {
                 return true;
             }
         } else {
-            if(this.props.highlightedArticleNode === nextProps.highlightedArticleNode && this.state.loadedArticle === nextState.loadedArticle) {
+            if(this.props.highlightedArticleNode == nextProps.highlightedArticleNode && this.state.loadedArticle == nextState.loadedArticle) {
                 return false;
             } else {
                 return true;
@@ -37,24 +37,19 @@ class Article extends Component {
                 let id = this.props.match.params.id;
                 nhkAxios.get('/news/easy/' + id + '/' + id + '.html')
                 .then(response => {
-                    //console.log(response);
                    let html = parse(response.data);
                     html.removeWhitespace();
-                    //console.log(html);
                     html = findObjectInHTML(html, 'id', 'js-article-body');
                     removeAllInstancesByTag(html, 'a', html);
                     removeAllInstancesByTag(html, 'iframe', html);
                     removeAllInstancesByTag(html, 'figure', html);
                     html = removeAllInstancesByAttribute(html, 'class', 'playerWrapper');
                     removeAllInstancesByTag(html, 'span', html);
-                    //console.log(html);
-                    //console.log(html.childNodes[0].innerHTML);
                     this.setState({loadedArticle: html});
                     this.props.getArticle(html);
                     this.setState({loadedArticleId: id});
                 })
                 .catch(error => {
-                    //console.log('something broke', error);
                     this.setState({loadedArticleId: null});
                 });
             }

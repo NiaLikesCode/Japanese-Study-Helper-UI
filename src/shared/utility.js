@@ -73,7 +73,7 @@ export const removeAllInstancesByTag = (object, htmlTag, parentObject) => {
 const swapNodeWithChildren = (node) => {
     let indexOfObject = node.parentNode.childNodes.findIndex(child => child === node);
     //make node's parent the new parent of it's children
-    node.childNodes.foreach(child => {
+    node.childNodes.forEach(child => {
         if(child.nodeType !== 3) {
             child.parentNode = node.parentNode;
         }
@@ -149,7 +149,7 @@ export const mapOutLevels = (object, currentResultsObject) => {
         };
         //add stems to vocab object
         vocabObject = createStem(vocabObject, vocab.data.parts_of_speech)
-        //If there is then it adds the vocab to the array list of vocab for that level, 
+        //If the level the vocab is from exists then it adds the vocab to the array list of vocab for that level, 
         //otherwise it creates a new level and creates array of vocab in that level and add vocab to that array
         if(foundLevelObject) {
             mappedLevels[vocab.data.level].vocabList[vocab.id] = vocabObject;
@@ -174,13 +174,16 @@ export const extractVocabStatus = (vocabStatuses, currentObject) => {
     vocabStatuses.data.forEach(vocabStatus => {
         let id = vocabStatus.data.subject_id
         Object.values(mappedLevels).forEach(level => {
+            let isAllLevelSelected = true;
             let vocabList = level.vocabList;
             if(vocabList.hasOwnProperty(id)) {
                 vocabList[id].started = true;
                 vocabList[id].srsStage = vocabStatus.data.srs_stage;
                 vocabList[id].selected = true;
+                if(!vocabList[id].selected) isAllLevelSelected = false;
                 if(vocabList[id].srsStage == 9) vocabList[id].burned = true;
             }
+            level.isAllSelcted = isAllLevelSelected;
         }); 
     });
     return mappedLevels;

@@ -20,11 +20,11 @@ class SideDrawer extends Component  {
         }
     }
 
-    selectAllHandler = (levelId) => {
+    selectAllHandler = (levelId, newState) => {
         let updatedWkLevels = JSON.parse(JSON.stringify(this.props.wkLevels));
         let updatedSelectedVocabList = [...this.state.selectedVocabList];
         Object.values(updatedWkLevels[levelId].vocabList).forEach(vocab => {
-            vocab.selected = !vocab.selected;
+            vocab.selected = newState;
             if(vocab.selected) {
                 updatedSelectedVocabList.push(vocab);
             } 
@@ -55,8 +55,8 @@ class SideDrawer extends Component  {
             accordions = Object.values(this.props.wkLevels).map(wkLevel => (
                 <Accordion
                     key={wkLevel.wkLevelTitle}
-                    accordPanelSelectAll={(accrodEls) => this.selectAllHandler(accrodEls)}
-                    selectAll={false}
+                    accordPanelSelectAll={(levelId, newState) => this.selectAllHandler(levelId, newState)}
+                    selectAll={wkLevel.isAllSelected}
                     levelId={wkLevel.wkLevelId}
                     accordElementOnChange={(id) => this.onChangeHandler(id, wkLevel.wkLevelId)}
                     vocabList={wkLevel.vocabList} > 

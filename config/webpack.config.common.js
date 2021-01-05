@@ -7,7 +7,7 @@ const imageInlineSizeLimit = parseInt(
   );
 
 module.exports = {
-    entry: ['@babel/polyfill', paths.appIndexJs],
+    entry: paths.appIndexJs,
     output: {
         filename: '[name].[contenthash].js',
         path: paths.appBuild,
@@ -48,16 +48,18 @@ module.exports = {
             {
                 test: [/\.bmp$/, /\.gif$/, /\.jpe?g$/, /\.png$/],
                 loader: require.resolve('url-loader'),
+                //type: 'asset/inline',
                 options: {
                   limit: imageInlineSizeLimit,
-                  name: 'static/media/[name].[hash:8].[ext]',
+                  name: 'static/media/[name].[contenthash:8].[ext]',
                 },
             },
             {
                 loader: require.resolve('file-loader'),
+                //type: 'asset/resource',
                 exclude: [/\.(js|mjs|jsx|ts|tsx|scss)$/, /\.html$/, /\.json$/],
                 options: {
-                    name: 'static/media/[name].[hash:8].[ext]',
+                    name: 'static/media/[name].[contenthash:8].[ext]',
                 },
             }
         ]
